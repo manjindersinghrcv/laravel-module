@@ -66,6 +66,6 @@ return array (
   ),
   'modules' => 
   array (
-    
+    0 => 'Admin',
   ),
 );
