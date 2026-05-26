@@ -103,6 +103,7 @@ use RCV\Core\Console\Commands\Database\Migrations\ModuleMigrateResetCommand;
 use RCV\Core\Console\Commands\Database\Migrations\ModuleMigrationMakeCommand;
 use RCV\Core\Console\Commands\Database\Migrations\MigrateSingleModuleMigration;
 use RCV\Core\Console\Commands\Database\Migrations\ModuleMigrateRollbackCommand;
+use RCV\Core\Console\Commands\InitializeHooks;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -115,6 +116,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     protected $commands = [
         // Action Commands
+        InitializeHooks::class,
         ModuleMarketplaceCommand::class,
         ModuleStateCommand::class,
         ModuleEnableCommand::class,
@@ -208,6 +210,11 @@ class CoreServiceProvider extends ServiceProvider
 
         // Register configuration first
         $this->registerConfig();
+
+        // Register hook system if enabled in config
+        if (config('rcv-hooks.enabled') === true) {
+            $this->app->register(\RCV\Core\Hooks\Providers\HookServiceProvider::class);
+        }
 
         // Register event listeners
         Event::listen(ModuleEnabled::class, ClearCacheOnModuleEnable::class);
@@ -399,6 +406,7 @@ class CoreServiceProvider extends ServiceProvider
             'metrics' => __DIR__ . '/../Config/metrics.php',
             'security' => __DIR__ . '/../Config/security.php',
             'communication' => __DIR__ . '/../Config/communication.php',
+            'rcv-hooks' => __DIR__ . '/../Config/rcv-hooks.php',
         ];
 
         foreach ($configs as $key => $path) {
@@ -421,6 +429,7 @@ class CoreServiceProvider extends ServiceProvider
             __DIR__ . '/../Config/metrics.php' => config_path('metrics.php'),
             __DIR__ . '/../Config/security.php' => config_path('security.php'),
             __DIR__ . '/../Config/communication.php' => config_path('communication.php'),
+            __DIR__ . '/../Config/rcv-hooks.php' => config_path('rcv-hooks.php'),
         ], 'rcv-core-config');
     }
 
