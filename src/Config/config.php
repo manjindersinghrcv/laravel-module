@@ -67,5 +67,8 @@ return array (
   'modules' => 
   array (
     0 => 'Admin',
+    1 => 'Blog',
+    2 => 'UserManagement',
+    3 => 'Auth',
   ),
 );

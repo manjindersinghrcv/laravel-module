@@ -40,21 +40,28 @@ class HookManager
     /**
      * Execute action hook.
      */
-    public function execute(string $hook, ...$args): void
+    public function execute(string $hook, ...$args): array
     {
         if (!$this->enabled) {
-            return;
+            return [];
         }
 
         $listeners = $this->registry->get($hook);
 
+        $results = [];
+
         foreach ($listeners as $listener) {
             try {
-                $listener(...$args);
+
+                $results[] = $listener(...$args);
+
             } catch (Throwable $e) {
+
                 $this->handleException($hook, $e);
             }
         }
+
+        return $results;
     }
 
     /**
