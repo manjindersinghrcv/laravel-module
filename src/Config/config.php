@@ -70,5 +70,10 @@ return array (
     1 => 'Blog',
     2 => 'UserManagement',
     3 => 'Auth',
+    4 => 'Navigation',
+    5 => 'Dashboard',
+    6 => 'Users',
+    7 => 'Blogs',
+    8 => 'Widget',
   ),
 );

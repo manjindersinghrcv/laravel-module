@@ -118,14 +118,14 @@ class InitializeHooks extends Command
         }
 
         // Safely get first active module
-        $firstModule = collect($activeModules)->first();
+        foreach ($activeModules as $module) {
 
         // Extract module name safely
-        $moduleName = is_object($firstModule)
-            ? ($firstModule->name ?? method_exists($firstModule, 'getName')
-                ? $firstModule->getName()
+        $moduleName = is_object($module)
+            ? ($module->name ?? method_exists($module, 'getName')
+                ? $module->getName()
                 : 'UnknownModule')
-            : (string) $firstModule;
+            : (string) $module;
 
         $moduleHooksDir = base_path(
             "Modules/{$moduleName}/src/Hooks"
@@ -159,6 +159,8 @@ class InitializeHooks extends Command
                 fn () => true
             );
         }
+    }
+
 
         /*
         |--------------------------------------------------------------------------
